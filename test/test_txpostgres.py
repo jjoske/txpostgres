@@ -27,7 +27,7 @@ def getSkipForPsycopg2():
     try:
         psycopg2.connect(user=DB_USER, password=DB_PASS,
                          host=DB_HOST, database=DB_NAME).close()
-    except psycopg2.Error, e:
+    except psycopg2.Error as e:
         return ("cannot connect to test database %r "
                 "using host %r, user %r and password %r: %s" %
                 (DB_NAME, DB_HOST, DB_USER, DB_PASS, e))
@@ -1067,8 +1067,8 @@ class TxPostgresCancellationTestCase(_SimpleDBSetupMixin, Psycopg2TestCase):
             return task.deferLater(reactor, interval, checkActivity, remaining)
 
         def checkActivity(remaining):
-            d = self.extra.runQuery("select current_query like '%%pg_sleep%%' "
-                                    "from pg_stat_activity where procpid = %s",
+            d = self.extra.runQuery("select state like '%%pg_sleep%%' "
+                                    "from pg_stat_activity where pid = %s",
                                     (self.conn.get_backend_pid(), ))
             return d.addCallback(gotResult, remaining - 1)
 
