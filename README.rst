@@ -18,7 +18,7 @@ establishing.
 The main advantage of txpostgres over Twisted's built-in database support is
 non-blocking connection building and complete lack of thread usage.
 
-It runs on Python 2.5, 2.6, 2.7 and PyPy_.
+This version version has been notified to run in python3.4 with postgres 9.4.  Other version may be broken.
 
 If you got txpostgres as a source tarball, you can run the automated test suite
 and install the library with::

@@ -1067,9 +1067,9 @@ class TxPostgresCancellationTestCase(_SimpleDBSetupMixin, Psycopg2TestCase):
             return task.deferLater(reactor, interval, checkActivity, remaining)
 
         def checkActivity(remaining):
-            d = self.extra.runQuery("select state like '%%pg_sleep%%' "
+            d = self.extra.runQuery("select query like '%%pg_sleep%%' "
                                     "from pg_stat_activity where pid = %s",
-                                    (self.conn.get_backend_pid(), ))
+                                   (self.conn.get_backend_pid(), ))
             return d.addCallback(gotResult, remaining - 1)
 
         return checkActivity(initial_remaining)
@@ -1295,7 +1295,7 @@ class TxPostgresNotifyTestCase(_SimpleDBSetupMixin, Psycopg2TestCase):
                 "least version 2.3.0 of psycopg2 to process NOTIFY payloads.")
 
         dl = [defer.Deferred() for _ in range(10)]
-        payloads = map(str, range(10))
+        payloads = list(map(str, range(10)))
         notifyD = defer.DeferredList(dl)
 
         def observer(notify):
