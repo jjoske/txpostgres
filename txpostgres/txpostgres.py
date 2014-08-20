@@ -43,12 +43,12 @@ documentation_
 """
 from __future__ import absolute_import
 
-from zope.interface import implements
+from zope.interface import implementer
 
 from twisted.internet import interfaces, main, defer, task
 from twisted.python import failure, log
 
-from txpostgres.psycopg2_impl import psycopg2
+from .psycopg2_impl import psycopg2
 
 try:
     psycopg2.extensions.POLL_OK
@@ -85,6 +85,7 @@ class _CancelInProgress(Exception):
     """
 
 
+@implementer(interfaces.IReadWriteDescriptor)
 class _PollingMixin(object):
     """
     An object that wraps something pollable. It can take care of waiting for
@@ -102,8 +103,6 @@ class _PollingMixin(object):
     :var prefix: Prefix used during log formatting to indicate context.
     :vartype prefix: :class:`str`
     """
-
-    implements(interfaces.IReadWriteDescriptor)
 
     reactor = None
     prefix = "pollable"
